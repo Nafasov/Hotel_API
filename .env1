@@ -1,7 +1,12 @@
-
 SECRET_KEY = 'django-insecure-ohd*cpt^bgpdiam)6qr)%e$*0c%2ed7olrze!p&n^)nuw!*f*('
 
 DEBUG = '1'
 
 
+
+DB_NAME=
+DB_USER=
+DB_PASSWORD=
+DB_HOST=
+DB_PORT=
 
