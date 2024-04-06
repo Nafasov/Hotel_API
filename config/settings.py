@@ -52,7 +52,8 @@ INSTALLED_APPS = [
     'app.contact',
     'app.account',
     'app.main',
-    'app.rooms'
+    'app.rooms',
+    'app.blog'
 ]
 
 MIDDLEWARE = [
