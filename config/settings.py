@@ -13,6 +13,9 @@ import os
 from pathlib import Path
 
 from datetime import timedelta
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -44,7 +47,12 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'drf_yasg',
-    'django_filters'
+    'django_filters',
+
+    'app.contact',
+    'app.account',
+    'app.main',
+    'app.rooms'
 ]
 
 MIDDLEWARE = [
@@ -76,6 +84,8 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'config.wsgi.application'
+
+AUTH_USER_MODEL = 'account.User'
 
 
 # Database
@@ -116,7 +126,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en'
 
-TIME_ZONE = 'Aisa/Tashkent'
+TIME_ZONE = 'Asia/Tashkent'
 
 USE_I18N = True
 
