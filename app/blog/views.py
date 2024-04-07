@@ -104,6 +104,7 @@ class CommentNEWPostAPIView(viewsets.ModelViewSet):
 
 
 class LikeNEWPostAPIView(generics.GenericAPIView):
+    # blog/{blog_id}/like/
     queryset = CommentNewBlog.objects.all()
     serializer_class = BlogNewLikeSerializer
     permission_classes = [IsAuthorOrReadOnly]
