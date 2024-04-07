@@ -23,7 +23,7 @@ urlpatterns = [
     path('tags/', TagAPIView.as_view()),
     path('list/', BlogNEWPostAPIView.as_view()),
     path('detail/<slug:slug>/', BlogNEWPostAPIView.as_view()),
-    path('<int:blog_id>/content/', ContentNEWPostAPIView.as_view())
+    path('<int:blog_id>/content/', ContentNEWPostAPIView.as_view()),
     path('<int:blog_id>/', include(router.urls)),
     path('<int:blog_id>/like', LikeNEWPostAPIView.as_view())
 ]
