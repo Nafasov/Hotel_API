@@ -17,7 +17,7 @@ class BaseModel(models.Model):
 class BlogPost(BaseModel):
     author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     title = models.CharField(max_length=221)
-    image = models.ImageField(upload_to='blog/post')
+    image = models.ImageField(upload_to='blog/post', null=True, blank=True)
     description = models.TextField()
 
 

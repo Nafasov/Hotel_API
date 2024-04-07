@@ -8,6 +8,7 @@ from .views import (
     BlogNEWPostAPIView,
     ContentNEWPostAPIView,
     CommentNEWPostAPIView,
+    CommentNEWDeleteAPIView,
     LikeNEWPostAPIView
     )
 
@@ -15,7 +16,6 @@ app_name = 'blog'
 
 router = DefaultRouter()
 router.register('post', BlogPostAPIView)
-router.register('<int:blog_id>/comment', CommentNEWPostAPIView)
 
 urlpatterns = [
     path('', include(router.urls)),
@@ -24,6 +24,8 @@ urlpatterns = [
     path('new/list/', BlogNEWPostAPIView.as_view()),
     path('new/detail/<slug:slug>/', BlogNEWPostAPIView.as_view()),
     path('new/<int:blog_id>/content/', ContentNEWPostAPIView.as_view()),
+    path('new/<int:blog_id>/comment/', CommentNEWPostAPIView.as_view()),
+    path('new/<int:blog_id>delete/comment/<int:pk>/', CommentNEWDeleteAPIView.as_view()),
     path('new/<int:blog_id>/like', LikeNEWPostAPIView.as_view())
 ]
 

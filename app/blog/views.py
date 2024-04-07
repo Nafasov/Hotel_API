@@ -34,9 +34,9 @@ class BlogPostAPIView(viewsets.ModelViewSet):
     permission_classes = [IsAuthorOrReadOnly]
 
     def get_serializer_class(self):
-        if self.request.method == "GET":
-            return self.serializer_class
-        return self.serializer_post_class
+        if self.request.method == "POST":
+            return self.serializer_post_class
+        return self.serializer_class
 
 
 class SendBlogNEWAPIView(generics.ListCreateAPIView):
@@ -72,11 +72,13 @@ class ContentNEWPostAPIView(generics.ListAPIView):
     def get_queryset(self):
         qs = super().get_queryset()
         blog_id = self.kwargs.get("blog_id")
-        qs = qs.filter(blog_post_id=blog_id)
-        return qs
+        if blog_id:
+            qs = qs.filter(blog_post_id=blog_id)
+            return qs
+        return qs.none()
 
 
-class CommentNEWPostAPIView(viewsets.ModelViewSet):
+class CommentNEWPostAPIView(generics.ListCreateAPIView):
     # blog/{}/comment/ --> list, create
     # blog/{}/comment/{comment_id} --> update, delete
 
@@ -84,27 +86,45 @@ class CommentNEWPostAPIView(viewsets.ModelViewSet):
     serializer_class = CommentNewBlogSerializer
     serializer_post_class = CommentNewBlogPOSTSerializer
     permission_classes = [IsAuthorOrReadOnly]
+    print('aaaaaa')
 
     def get_queryset(self):
         qs = super().get_queryset()
         blog_id = self.kwargs.get("blog_id")
-        qs = qs.filter(blog_post_id=blog_id)
-        return qs
+        if blog_id:
+            qs = qs.filter(blog_post_id=blog_id)
+            return qs
+        return qs.none()
 
     def get_serializer_class(self):
-        if self.request.method == "GET":
-            return self.serializer_class
-        return self.serializer_post_class
+        if self.request.method == "POST":
+            return self.serializer_post_class
+        return self.serializer_class
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
         blog_id = self.kwargs.get("blog_id")
-        context["blog_id"] = blog_id
+        context["blog_post_id"] = blog_id
         return context
 
 
+class CommentNEWDeleteAPIView(generics.DestroyAPIView):
+    # blog/new/{blog_id}/comment/{comment_id}/
+    queryset = CommentNewBlog.objects.all()
+    serializer_class = CommentNewBlogSerializer
+    permission_classes = [IsAuthorOrReadOnly]
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        blog_id = self.kwargs.get("blog_id")
+        if blog_id:
+            qs = qs.filter(blog_post_id=blog_id)
+            return qs
+        return qs.none()
+
+
 class LikeNEWPostAPIView(generics.GenericAPIView):
-    # blog/{blog_id}/like/
+    # blog/new/{blog_id}/like/
     queryset = CommentNewBlog.objects.all()
     serializer_class = BlogNewLikeSerializer
     permission_classes = [IsAuthorOrReadOnly]
@@ -112,10 +132,10 @@ class LikeNEWPostAPIView(generics.GenericAPIView):
     def post(self, request, *args, **kwargs):
         blog_id = self.kwargs.get("blog_id")
         author_id = request.user.id
-        has_like = BlogNewLike.objects.filters(blog_id=blog_id, author_id=author_id)
+        has_like = BlogNewLike.objects.filter(blog_post_id=blog_id, author_id=author_id)
         if has_like:
             has_like.delete()
             return Response({'success': True, 'message': 'Episode like remove'})
         else:
-            BlogNewLike.objects.create(blog_id=blog_id, author_id=author_id)
+            BlogNewLike.objects.create(blog_post_id=blog_id, author_id=author_id)
             return Response({'success': True, 'message': 'Episode like add'})

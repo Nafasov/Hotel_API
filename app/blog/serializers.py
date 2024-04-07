@@ -27,8 +27,8 @@ class BlogPostPOSTSerializer(serializers.ModelSerializer):
         fields = ['id', 'title', 'image', 'description', 'created_date']
 
     def create(self, validated_data):
-        request = self.context.get('request')
-        author_id = request.get('author_id')
+        request = self.context['request']
+        author_id = request.user.id
         validated_data['author_id'] = author_id
         return super().create(validated_data)
 
@@ -68,10 +68,11 @@ class CommentNewBlogPOSTSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         request = self.context.get('request')
-        blog_post_id = validated_data.pop('blog_post_id')
-        author_id = request.get('author_id')
+        blog_post_id = self.context.get('blog_post_id')
+        author_id = request.user.id
         validated_data['author_id'] = author_id
         validated_data['blog_post_id'] = blog_post_id
+        print(validated_data)
         return super().create(validated_data)
 
 
@@ -83,10 +84,8 @@ class CommentNewBlogSerializer(serializers.ModelSerializer):
         fields = ['id', 'author', 'parent', 'top_level_comment_id', 'message', 'created_date']
 
 
-class BlogNewLikeSerializer(serializers.Serializer):
-    blog_id = serializers.IntegerField()
-    author_id = serializers.IntegerField()
-
+class BlogNewLikeSerializer(serializers.ModelSerializer):
     class Meta:
-        fields = ['id', 'blog_id', 'author_id']
+        model = BlogNewLike
+        fields = ['id', 'blog_post', 'author']
 
