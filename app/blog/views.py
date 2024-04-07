@@ -72,7 +72,7 @@ class ContentNEWPostAPIView(generics.ListAPIView):
     def get_queryset(self):
         qs = super().get_queryset()
         blog_id = self.kwargs.get("blog_id")
-        qs = qs.filter(blog_id=blog_id)
+        qs = qs.filter(blog_post_id=blog_id)
         return qs
 
 
@@ -88,7 +88,7 @@ class CommentNEWPostAPIView(viewsets.ModelViewSet):
     def get_queryset(self):
         qs = super().get_queryset()
         blog_id = self.kwargs.get("blog_id")
-        qs = qs.filter(blog_id=blog_id)
+        qs = qs.filter(blog_post_id=blog_id)
         return qs
 
     def get_serializer_class(self):
@@ -111,11 +111,11 @@ class LikeNEWPostAPIView(generics.GenericAPIView):
 
     def post(self, request, *args, **kwargs):
         blog_id = self.kwargs.get("blog_id")
-        user_id = request.user.id
-        has_like = BlogNewLike.objects.filter(blog_id=blog_id, user_id=user_id).exists()
+        author_id = request.user.id
+        has_like = BlogNewLike.objects.filters(blog_id=blog_id, author_id=author_id)
         if has_like:
             has_like.delete()
             return Response({'success': True, 'message': 'Episode like remove'})
         else:
-            BlogNewLike.objects.create(blog_id=blog_id, user_id=user_id)
+            BlogNewLike.objects.create(blog_id=blog_id, author_id=author_id)
             return Response({'success': True, 'message': 'Episode like add'})

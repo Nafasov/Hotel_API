@@ -55,7 +55,7 @@ class ContentNewBlog(BaseModel):
 class CommentNewBlog(BaseModel):
     blog_post = models.ForeignKey(BlogNEWPost, on_delete=models.CASCADE, related_name='comments', null=True)
     author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-    parent = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    parent = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True)
     top_level_comment_id = models.IntegerField(null=True, blank=True)
     message = models.TextField()
 

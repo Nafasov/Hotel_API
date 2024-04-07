@@ -14,18 +14,17 @@ from .views import (
 app_name = 'blog'
 
 router = DefaultRouter()
-router.register('blog', BlogPostAPIView)
-router.register('comment', CommentNEWPostAPIView)
+router.register('post', BlogPostAPIView)
+router.register('<int:blog_id>/comment', CommentNEWPostAPIView)
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('send/blod/', SendBlogNEWAPIView.as_view()),
+    path('send/blog/', SendBlogNEWAPIView.as_view()),
     path('tags/', TagAPIView.as_view()),
-    path('list/', BlogNEWPostAPIView.as_view()),
-    path('detail/<slug:slug>/', BlogNEWPostAPIView.as_view()),
-    path('<int:blog_id>/content/', ContentNEWPostAPIView.as_view()),
-    path('<int:blog_id>/', include(router.urls)),
-    path('<int:blog_id>/like', LikeNEWPostAPIView.as_view())
+    path('new/list/', BlogNEWPostAPIView.as_view()),
+    path('new/detail/<slug:slug>/', BlogNEWPostAPIView.as_view()),
+    path('new/<int:blog_id>/content/', ContentNEWPostAPIView.as_view()),
+    path('new/<int:blog_id>/like', LikeNEWPostAPIView.as_view())
 ]
 
 

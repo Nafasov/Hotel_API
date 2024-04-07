@@ -85,8 +85,8 @@ class CommentNewBlogSerializer(serializers.ModelSerializer):
 
 class BlogNewLikeSerializer(serializers.Serializer):
     blog_id = serializers.IntegerField()
-    user_id = serializers.IntegerField()
+    author_id = serializers.IntegerField()
 
     class Meta:
-        fields = ['id', 'blog_id', 'user_id']
+        fields = ['id', 'blog_id', 'author_id']
 
