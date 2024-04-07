@@ -12,7 +12,6 @@ from .views import (
 
 app_name = 'blog'
 
-router = DefaultRouter()
 
 urlpatterns = [
 
