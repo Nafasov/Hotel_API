@@ -12,7 +12,7 @@ from .views import (
 
 app_name = 'blog'
 
-router = routers.DefaultRouter()
+router = DefaultRouter()
 
 urlpatterns = [
 
