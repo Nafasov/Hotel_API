@@ -1,7 +1,18 @@
 from django.urls import path
 
+from .views import (
+    BlogPostAPIView,
+    SendBlogNEWAPIView,
+    TagAPIView,
+    BlogNEWPostAPIView,
+    ContentNEWPostAPIView,
+    CommentNEWPostAPIView,
+    LikeNEWPostAPIView
+    )
 
 app_name = 'blog'
+
+router = routers.DefaultRouter()
 
 urlpatterns = [
 
