@@ -64,7 +64,7 @@ class RoomCommentsPOSTSerializer(serializers.ModelSerializer):
 class RoomLikesSerializer(serializers.ModelSerializer):
     class Meta:
         model = RoomCommentLikes
-        fields = ['id', 'rooms', 'author']
+        fields = ['id']
 
 
 class BookingSerializer(serializers.ModelSerializer):

@@ -105,13 +105,13 @@ class RoomLikesAPIView(generics.GenericAPIView):
 
     def post(self, request, *args, **kwargs):
         room_id = self.kwargs.get('room_id')
-        user_id = request.user.id
-        has_like = RoomCommentLikes.objects.filters(rooms_id=room_id, user_id=user_id)
+        author_id = request.user.id
+        has_like = RoomCommentLikes.objects.filter(rooms_id=room_id, author_id=author_id)
         if has_like:
             has_like.delete()
             return Response({'success': True, 'message': 'Episode like remove'})
         else:
-            RoomCommentLikes.objects.create(rooms_id=room_id, author_id=user_id)
+            RoomCommentLikes.objects.create(rooms_id=room_id, author_id=author_id)
             return Response({'success': True, 'message': 'Episode like add'})
 
 
