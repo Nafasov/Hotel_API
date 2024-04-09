@@ -71,7 +71,7 @@ class RoomContentAPIView(generics.ListAPIView):
 class CommentDeleteAPIView(generics.DestroyAPIView):
     # room/{room_id}/comment/{pk}/delete
     queryset = RoomComments.objects.all()
-    serializer_class = RoomCommentsPOSTSerializer
+    serializer_class = RoomCommentsSerializer
     permission_classes = [IsAuthorOrReadOnly]
 
     def get_queryset(self):
@@ -87,7 +87,13 @@ class CommentAPIView(generics.ListCreateAPIView):
     # room/{room_id}/comment
     queryset = RoomComments.objects.all()
     serializer_class = RoomCommentsSerializer
+    serializer_post_class = RoomCommentsPOSTSerializer
     permission_classes = [IsAuthenticated]
+
+    def get_serializer_class(self):
+        if self.request.method == 'POST':
+            return self.serializer_post_class
+        return self.serializer_class
 
     def get_queryset(self):
         qs = super().get_queryset()
@@ -97,6 +103,12 @@ class CommentAPIView(generics.ListCreateAPIView):
             return qs
         return qs.none()
 
+    def get_serializer_context(self):
+        ctx = super().get_serializer_context()
+        room_id = self.kwargs.get('room_id')
+        ctx['room_id'] = room_id
+        return ctx
+
 
 class RoomLikesAPIView(generics.GenericAPIView):
     queryset = RoomCommentLikes.objects.all()
@@ -104,6 +116,7 @@ class RoomLikesAPIView(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
+        print(request.data)
         room_id = self.kwargs.get('room_id')
         author_id = request.user.id
         has_like = RoomCommentLikes.objects.filter(rooms_id=room_id, author_id=author_id)

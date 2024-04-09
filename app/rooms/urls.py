@@ -19,7 +19,7 @@ urlpatterns = [
     path('<int:room_id>/images/', RoomImagesAPIView.as_view()),
     path('<int:room_id>/content/', RoomContentAPIView.as_view()),
     path('<int:room_id>/comments/', CommentAPIView.as_view()),
-    path('<int:room_id>/comments/<int:comment_id>/', CommentDeleteAPIView.as_view()),
+    path('<int:room_id>/comments/<int:pk>/', CommentDeleteAPIView.as_view()),
     path('<int:room_id>/booking/', BookingAPIView.as_view()),
     path('<int:room_id>/like/', RoomLikesAPIView.as_view()),
 ]
