@@ -1,6 +1,8 @@
 from rest_framework import viewsets, generics
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 
+from app.blog.permission import IsAuthorOrReadOnly
 from .models import (
     RoomServices,
     Rooms,
@@ -41,13 +43,15 @@ class BookingAPIView(generics.ListAPIView):
 class RoomImagesAPIView(generics.ListAPIView):
     # room/{room_id}/image
     queryset = RoomImages.objects.all()
-    serializer_class = RoomContentSerializer
+    serializer_class = RoomsImagesSerializer
 
     def get_queryset(self):
         qs = super().get_queryset()
         room_id = self.kwargs.get('room_id')
-        qs = qs.filter(room_id=room_id)
-        return qs
+        if room_id:
+            qs = qs.filter(room_id=room_id)
+            return qs
+        return qs.none()
 
 
 class RoomContentAPIView(generics.ListAPIView):
@@ -58,8 +62,59 @@ class RoomContentAPIView(generics.ListAPIView):
     def get_queryset(self):
         qs = super().get_queryset()
         room_id = self.kwargs.get('room_id')
-        qs = qs.filter(room_id=room_id)
-        return qs
+        if room_id:
+            qs = qs.filter(room_id=room_id)
+            return qs
+        return qs.none()
+
+
+class CommentDeleteAPIView(generics.DestroyAPIView):
+    # room/{room_id}/comment/{pk}/delete
+    queryset = RoomComments.objects.all()
+    serializer_class = RoomCommentsPOSTSerializer
+    permission_classes = [IsAuthorOrReadOnly]
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        room_id = self.kwargs.get('room_id')
+        if room_id:
+            qs = qs.filter(room_id=room_id)
+            return qs
+        return qs.none()
+
+
+class CommentAPIView(generics.ListCreateAPIView):
+    # room/{room_id}/comment
+    queryset = RoomComments.objects.all()
+    serializer_class = RoomCommentsSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        room_id = self.kwargs.get('room_id')
+        if room_id:
+            qs = qs.filter(room_id=room_id)
+            return qs
+        return qs.none()
+
+
+class RoomLikesAPIView(generics.GenericAPIView):
+    queryset = RoomCommentLikes.objects.all()
+    serializer_class = RoomLikesSerializer
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        room_id = self.kwargs.get('room_id')
+        user_id = request.user.id
+        has_like = RoomCommentLikes.objects.filters(rooms_id=room_id, user_id=user_id)
+        if has_like:
+            has_like.delete()
+            return Response({'success': True, 'message': 'Episode like remove'})
+        else:
+            RoomCommentLikes.objects.create(rooms_id=room_id, author_id=user_id)
+            return Response({'success': True, 'message': 'Episode like add'})
+
+
 
 
 
