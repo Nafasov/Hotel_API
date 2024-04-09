@@ -48,6 +48,7 @@ class SendBlogNEWAPIView(generics.ListCreateAPIView):
 class TagAPIView(generics.ListAPIView):
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
+    pagination_class = None
 
 
 class BlogNEWPostAPIView(generics.ListAPIView):
@@ -68,6 +69,7 @@ class ContentNEWPostAPIView(generics.ListAPIView):
     # blog/{blog_id}/content/
     queryset = ContentNewBlog.objects.all()
     serializer_class = ContentNewBlogSerializer
+    pagination_class = None
 
     def get_queryset(self):
         qs = super().get_queryset()
@@ -86,7 +88,6 @@ class CommentNEWPostAPIView(generics.ListCreateAPIView):
     serializer_class = CommentNewBlogSerializer
     serializer_post_class = CommentNewBlogPOSTSerializer
     permission_classes = [IsAuthorOrReadOnly]
-    print('aaaaaa')
 
     def get_queryset(self):
         qs = super().get_queryset()
@@ -128,6 +129,7 @@ class LikeNEWPostAPIView(generics.GenericAPIView):
     queryset = CommentNewBlog.objects.all()
     serializer_class = BlogNewLikeSerializer
     permission_classes = [IsAuthorOrReadOnly]
+    pagination_class = None
 
     def post(self, request, *args, **kwargs):
         blog_id = self.kwargs.get("blog_id")
