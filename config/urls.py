@@ -45,4 +45,5 @@ urlpatterns = [
     path('account/', include('app.account.urls', namespace='account')),
     path('blog/', include('app.blog.urls', namespace='blog')),
     path('room/', include('app.rooms.urls', namespace='room')),
+    path('contact/', include('app.contact.urls', namespace='contact')),
 ]
