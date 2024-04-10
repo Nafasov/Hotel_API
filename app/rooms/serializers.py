@@ -67,7 +67,21 @@ class RoomLikesSerializer(serializers.ModelSerializer):
         fields = ['id']
 
 
+class BookingPOSTSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Booking
+        fields = ['id', 'check_in', 'check_out', 'adults', 'children']
+
+    def create(self, validated_data):
+        request = self.context.get('request')
+        author_id = request.user.id
+        room_id = self.context.get('room_id')
+        validated_data['author_id'] = author_id
+        validated_data['room_id'] = room_id
+        return super().create(validated_data)
+
+
 class BookingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Booking
-        fields = ['id', 'room', 'author', 'check_out', 'check_out', 'adults', 'children']
+        fields = ['id', 'author', 'room', 'check_out', 'check_out', 'adults', 'children']

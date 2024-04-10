@@ -20,8 +20,9 @@ from .serializers import (
     RoomContentSerializer,
     RoomCommentsSerializer,
     RoomCommentsPOSTSerializer,
-    RoomLikesSerializer
-    )
+    RoomLikesSerializer,
+    BookingPOSTSerializer
+)
 
 
 class RoomServicesAPIView(generics.ListAPIView):
@@ -34,10 +35,30 @@ class RoomsAPIView(generics.ListAPIView):
     serializer_class = RoomsSerializer
 
 
-class BookingAPIView(generics.ListAPIView):
+class BookingAPIView(generics.ListCreateAPIView):
+    # room/{room_id}/booking
     queryset = Booking.objects.all()
     serializer_class = BookingSerializer
+    serializer_post_class = BookingPOSTSerializer
     permission_classes = [IsAuthenticated]
+
+    def get_serializer_context(self):
+        ctx = super().get_serializer_context()
+        room_id = self.kwargs['room_id']
+        ctx['room_id'] = room_id
+        return ctx
+
+    def get_serializer_class(self):
+        if self.request.method == 'POST':
+            return self.serializer_post_class
+        return self.serializer_class
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        room_id = self.kwargs['room_id']
+        if room_id:
+            return qs.filter(room_id=room_id)
+        return qs.none()
 
 
 class RoomImagesAPIView(generics.ListAPIView):
