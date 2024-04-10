@@ -82,6 +82,8 @@ class BookingPOSTSerializer(serializers.ModelSerializer):
 
 
 class BookingSerializer(serializers.ModelSerializer):
+    author = UserSerializer(read_only=True)
+
     class Meta:
         model = Booking
-        fields = ['id', 'author', 'room', 'check_out', 'check_out', 'adults', 'children']
+        fields = ['id', 'author', 'room', 'check_in', 'check_out', 'adults', 'children']
