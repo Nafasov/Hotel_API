@@ -141,3 +141,4 @@ class LikeNEWPostAPIView(generics.GenericAPIView):
         else:
             BlogNewLike.objects.create(blog_post_id=blog_id, author_id=author_id)
             return Response({'success': True, 'message': 'Episode like add'})
+
