@@ -62,7 +62,7 @@ class BookingAPIView(generics.ListCreateAPIView):
 
     def get_serializer_context(self):
         ctx = super().get_serializer_context()
-        room_id = self.kwargs['room_id']
+        room_id = self.kwargs.get('room_id')
         ctx['room_id'] = room_id
         return ctx
 
